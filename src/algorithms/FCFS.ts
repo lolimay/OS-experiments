@@ -6,6 +6,7 @@ import { print } from '../utils';
  */
 export function FCFS(...pcbs: Array<PCB>): void {
     pcbs = pcbs.sort((a, b) => a.getArrivedTime() > b.getArrivedTime() ? 1 : -1);
+    const head = pcbs[0];
 
     for (let i=0; i<pcbs.length; i++) {
         if (i === pcbs.length-1) {

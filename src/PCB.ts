@@ -15,6 +15,10 @@ export class PCB {
         this.status = EProcessStatus.READY;
     }
 
+    public getName() {
+        return this.name;
+    }
+
     public getArrivedTime() {
         return this.arrivedTime;
     }
