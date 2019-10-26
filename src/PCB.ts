@@ -1,20 +1,25 @@
 import { EProcessStatus } from './definition/EProcessStatus';
-import { randomString } from './utils/randomString';
+import { randomString, randomNonNegativeInt } from './utils';
 
-export default class PCB {
+export class PCB {
     private name: string;
-    private next!: PCB;
+    private next!: PCB | null;
     private estimatedRunTime: number;
     private arrivedTime: number;
     private status: EProcessStatus;
 
     constructor() {
         this.name = randomString(10);
+        this.arrivedTime = randomNonNegativeInt(100) + 1;
+        this.estimatedRunTime = randomNonNegativeInt(100) + 1;
         this.status = EProcessStatus.READY;
-        this.estimatedRunTime = 
     }
 
-    public setNext(pcb: PCB): void {
+    public getArrivedTime() {
+        return this.arrivedTime;
+    }
+
+    public setNext(pcb: PCB | null): void {
         this.next = pcb;
     }
 }

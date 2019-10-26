@@ -5,18 +5,13 @@
   "dependencies": {
     "@types/jest": "24.0.19",
     "@types/node": "12.11.2",
-    "@types/react": "16.9.9",
-    "@types/react-dom": "16.9.2",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
-    "react-scripts": "3.2.0",
-    "typescript": "3.6.4"
+    "typescript": "3.6.4",
+    "xterm": "^4.1.0",
+    "xterm-addon-fit": "^0.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "jest",
-    "eject": "react-scripts eject"
+    "start": "parcel --host 0.0.0.0 -p 1234 watch src/index.html",
+    "test": "jest"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -32,5 +27,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.19",
+    "jest": "^24.9.0",
+    "parcel": "^1.12.4",
+    "ts-jest": "^24.1.0"
   }
 }
