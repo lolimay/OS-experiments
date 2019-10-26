@@ -17,3 +17,8 @@ body {
 .dg.ac {
     z-index: 1000;
 }
+
+#clock {
+    position: absolute;
+    right: 40.5%;
+}
