@@ -15,6 +15,11 @@ if (terminalHTMLElement !== null) {
 }
 
 export function print(s: any) {
+    if (typeof s === 'string') {
+        term.writeln(s);
+        return;
+    }
+
     const lines = JSON.stringify(s, null, 4).split('\n');
 
     lines.forEach(line => term.writeln(line));

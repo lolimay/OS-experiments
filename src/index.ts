@@ -1,7 +1,6 @@
 import  * as dat from 'dat.gui';
 import { FCFS } from './algorithms/FCFS';
 import { PCB } from './PCB';
-import { print } from './utils';
 import './index.css';
 import 'xterm/css/xterm.css';
 
@@ -13,23 +12,25 @@ var store = {
 };
 
 const gui = new dat.GUI();
-gui.add(store, 'clockSpeed', 0.5, 10);
+gui.add(store, 'clockSpeed', 0.5, 300);
 
 // Global Clock
 const clockElement = document.querySelector('#clock');
 setTimeout(function timer() {
-    store.currentTime++;
+    const tickEvent = new CustomEvent('tick', { detail: { currentTime: store.currentTime }});
+    
+    window.dispatchEvent(tickEvent);
     if (clockElement !== null && clockElement.innerHTML !== null) {
-        clockElement.innerHTML = `当前时间: ${ store.currentTime.toString() }`;
+        clockElement.innerHTML = `Current Time: ${ store.currentTime.toString() }`;
     }
-    setTimeout(timer, 1/store.clockSpeed * 1000)
+    setTimeout(timer, 1/store.clockSpeed * 1000);
+    store.currentTime++;
 }, 1/store.clockSpeed * 1000)
 
-// PCFS
+// FCFS Algorithm
 const pcbs: Array<PCB> = [];
 
 for (let i=0; i<5; i++) {
-    pcbs.push(new PCB());
+    pcbs.push(new PCB(0, 5));
 }
-
 FCFS(...pcbs);

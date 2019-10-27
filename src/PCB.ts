@@ -4,14 +4,13 @@ import { randomString, randomNonNegativeInt } from './utils';
 export class PCB {
     private name: string;
     private next!: PCB | null;
-    private estimatedRunTime: number;
-    private arrivedTime: number;
     private status: EProcessStatus;
 
-    constructor() {
+    constructor(
+        private arrivedTime: number = randomNonNegativeInt(100) + 1,
+        private estimatedRunTime: number = randomNonNegativeInt(100) + 1,
+    ) {
         this.name = randomString(10);
-        this.arrivedTime = randomNonNegativeInt(100) + 1;
-        this.estimatedRunTime = randomNonNegativeInt(100) + 1;
         this.status = EProcessStatus.READY;
     }
 
@@ -25,5 +24,13 @@ export class PCB {
 
     public setNext(pcb: PCB | null): void {
         this.next = pcb;
+    }
+
+    public getNext(): PCB | null {
+        return this.next ? this.next : null;
+    }
+
+    public getEstimatedRunTime(): number {
+        return this.estimatedRunTime;
     }
 }

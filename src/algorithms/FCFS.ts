@@ -1,12 +1,18 @@
 import { PCB } from '../PCB';
 import { print } from '../utils';
+import { Processor } from '../Processor';
+import { Queue } from '../Queue';
 
 /**
  * First-Come First-Serverd (FCFS) Algorithms
  */
 export function FCFS(...pcbs: Array<PCB>): void {
+    // Initialize
     pcbs = pcbs.sort((a, b) => a.getArrivedTime() > b.getArrivedTime() ? 1 : -1);
-    const head = pcbs[0];
+    const processor: Processor = new Processor();
+    const readyQueue: Queue<PCB> = new Queue();
+    const head: PCB | null = pcbs[0];
+    let process: PCB | null = head;
 
     for (let i=0; i<pcbs.length; i++) {
         if (i === pcbs.length-1) {
@@ -16,5 +22,49 @@ export function FCFS(...pcbs: Array<PCB>): void {
         pcbs[i].setNext(pcbs[i+1]);
     }
 
-    print(pcbs);
+    // Scheduling
+    window.addEventListener('tick', ({ detail: { currentTime: now } }) => {
+        const formattedNow = now.toString().padEnd(3, ' ');
+        let eventMsg: string = '';
+        let processStatus: string = '[ ]';
+
+
+        if (processor.isBusy()) {
+            // Free the processor when the running process is finished
+            if (now === processor.getFinishTime()) {
+                eventMsg += `Process ${ processor.getRunningProcess()?.getName() } ended. `;
+                processor.setFree();
+            }
+        }
+
+        handleArrivedProcess();
+
+        if (processor.isFree() && !readyQueue.isEmpty()) {
+            const runningProcess = readyQueue.dequeue();
+
+            processor.setRunningProcess(runningProcess);
+            processor.setFinishTime(now + runningProcess?.getEstimatedRunTime());
+
+            eventMsg += `Processor started running process ${ runningProcess?.getName() }. `;
+        }
+
+        processStatus = `[ ${ processor.getRunningProcess() ? processor.getRunningProcess().getName() : '' } ]`;
+        if (eventMsg) {
+            print(`${ formattedNow } ${ eventMsg }`);
+        }
+        print(`${ formattedNow } ${ processStatus }`);
+
+        function handleArrivedProcess() {
+            if (!process) return;
+
+            if (now === process.getArrivedTime()) {
+                eventMsg += `Process ${ process.getName() } arrived. `;
+                readyQueue.enqueue(process);
+                process = process.getNext();
+                handleArrivedProcess();
+            }
+        }
+    });
+
+    print(pcbs.map(pcb => ({...pcb, next: pcb.getNext()?.getName() })));
 }
