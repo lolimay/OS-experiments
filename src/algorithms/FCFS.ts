@@ -23,7 +23,7 @@ export function FCFS(...pcbs: Array<PCB>): void {
     }
 
     // Scheduling
-    window.addEventListener('tick', ({ detail: { currentTime: now } }) => {
+    window.addEventListener('tick', ({ detail: { currentTime: now } }: CustomEvent) => {
         const formattedNow = now.toString().padEnd(3, ' ');
         let eventMsg: string = '';
         let processStatus: string = '[ ]';
