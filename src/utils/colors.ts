@@ -5,3 +5,7 @@ export function red(s: string) {
 export function green(s: string) {
     return `\u001b[32m${ s }\u001b[39m`;
 }
+
+export function ywllow(s: string) {
+    return `\u001b[33m${ s }\u001b[39m`;
+}
