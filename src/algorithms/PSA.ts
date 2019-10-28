@@ -53,7 +53,7 @@ export function PSA(...pcbs: Array<PCB>): void {
         processStatus = `[ ${ processor.getRunningProcess()?.getName() || ''.padEnd(10,' ') } ]`;
         if (events.length > 0) {
             for (let eventMsg of events) {
-                print(`${ ''.padEnd(20, ' ') } ${ eventMsg }`);
+                print(`${ formattedNow.padEnd(20, ' ') } ${ eventMsg }`);
             }
         }
         print(`${ formattedNow } ${ processStatus }`);
