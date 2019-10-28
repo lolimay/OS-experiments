@@ -40,7 +40,9 @@ export class Processor {
         const { now } = store;
 
         this.runningProcess = process;
-        this.setFinishTime(now + this.runningProcess.getEstimatedRunTime());
+        if (process !== null) {
+            this.setFinishTime(now + this.runningProcess.getEstimatedRunTime());
+        }
     }
 
     public setFree(): void {

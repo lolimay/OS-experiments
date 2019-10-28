@@ -34,9 +34,7 @@ export function FCFS(...pcbs: Array<PCB>): void {
         }
 
         (function updateReadyQueue() {
-            if (!process) return;
-
-            if (now === process.getArrivedTime()) {
+            if (now === process?.getArrivedTime()) {
                 eventMsg += `Process ${ process.getName() } arrived. `;
                 readyQueue.enqueue(process);
                 process = process.getNext();
@@ -48,10 +46,10 @@ export function FCFS(...pcbs: Array<PCB>): void {
             const runningProcess = readyQueue.dequeue();
 
             processor.setRunningProcess(runningProcess);
-            eventMsg += `Processor started running process ${ runningProcess?.getName() }. `;
+            eventMsg += `Processor started running process ${ runningProcess.getName() }. `;
         }
 
-        processStatus = `[ ${ processor.getRunningProcess() ? processor.getRunningProcess().getName() : '' } ]`;
+        processStatus = `[ ${ processor.getRunningProcess()?.getName() || '' } ]`;
         if (eventMsg) {
             print(`${ formattedNow } ${ eventMsg }`);
         }
