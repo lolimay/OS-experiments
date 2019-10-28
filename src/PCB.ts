@@ -3,12 +3,17 @@ import { randomString, randomNonNegativeInt } from './utils';
 export class PCB {
     private name: string;
     private next!: PCB | null;
+    /**
+     * The smaller the priority number, the higher the priority.
+     */
+    private priority: number;
 
     constructor(
         private arrivedTime: number = randomNonNegativeInt(100) + 1,
         private estimatedRunTime: number = randomNonNegativeInt(100) + 1,
     ) {
         this.name = randomString(10);
+        this.priority = randomNonNegativeInt(5);
     }
 
     public getName() {
@@ -29,5 +34,9 @@ export class PCB {
 
     public getEstimatedRunTime(): number {
         return this.estimatedRunTime;
+    }
+
+    public getPriorityNumber() {
+        return this.priority;
     }
 }
