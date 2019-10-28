@@ -24,4 +24,10 @@ export class Queue<T> {
     public getLength(): number {
         return this.queue.length;
     }
+
+    public sort(sortFunc: (a, b) => number): Queue<T> {
+        this.queue.sort(sortFunc);
+
+        return this;
+    }
 }

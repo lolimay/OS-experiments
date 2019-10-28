@@ -4,11 +4,11 @@ import { Processor } from '../Processor';
 import { Queue } from '../Queue';
 
 /**
- * First-Come First-Serverd (FCFS) Algorithm
+ * Priority-Scheduling-Algorithm (PSA) Algorithm
  */
-export function FCFS(...pcbs: Array<PCB>): void {
+export function PSA(...pcbs: Array<PCB>): void {
     // Initialize
-    pcbs.sort((a, b) => a.getArrivedTime() > b.getArrivedTime() ? 1 : -1);
+    pcbs = pcbs.sort((a, b) => a.getArrivedTime() > b.getArrivedTime() ? 1 : -1);
     const processor: Processor = new Processor();
     const readyQueue: Queue<PCB> = new Queue();
     const head: PCB | null = pcbs[0];
@@ -37,6 +37,7 @@ export function FCFS(...pcbs: Array<PCB>): void {
             if (now === process?.getArrivedTime()) {
                 eventMsg += `Process ${ process.getName() } arrived. `;
                 readyQueue.enqueue(process);
+                readyQueue.sort((a, b) => a.getPriorityNumber() > b.getPriorityNumber() ? 1 : -1);
                 process = process.getNext();
                 updateReadyQueue();
             }
