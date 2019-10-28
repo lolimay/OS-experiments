@@ -1,8 +1,7 @@
 import { PCB } from '../PCB';
-import { print } from '../utils';
+import { print, red, green } from '../utils';
 import { Processor } from '../Processor';
 import { Queue } from '../Queue';
-
 /**
  * Priority-Scheduling-Algorithm (PSA) Algorithm
  */
@@ -29,13 +28,13 @@ export function PSA(...pcbs: Array<PCB>): void {
         let processStatus: string = '[ ]';
 
         if (processor.isBusy() && now === processor.getFinishTime()) {
-            eventMsg += `Process ${ processor.getRunningProcess()?.getName() } ended. `;
+            eventMsg += `process ${ processor.getRunningProcess()?.getName() } ${ red('ended') }. `;
             processor.setFree();
         }
 
         (function updateReadyQueue() {
             if (now === process?.getArrivedTime()) {
-                eventMsg += `Process ${ process.getName() } arrived. `;
+                eventMsg += `Process ${ process.getName() } ${ green('arrived') }. `;
                 readyQueue.enqueue(process);
                 readyQueue.sort((a, b) => a.getPriorityNumber() > b.getPriorityNumber() ? 1 : -1);
                 process = process.getNext();
