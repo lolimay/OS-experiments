@@ -16,6 +16,10 @@ export class PCB {
         this.priority = randomNonNegativeInt(100);
     }
 
+    public get isFnished() {
+        return this.estimatedRunTime <= 0;
+    }
+
     public getName() {
         return this.name;
     }
