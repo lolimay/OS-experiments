@@ -28,13 +28,9 @@ export function FCFS(...pcbs: Array<PCB>): void {
         let eventMsg: string = '';
         let processStatus: string = '[ ]';
 
-
-        if (processor.isBusy()) {
-            // Free the processor when the running process is finished
-            if (now === processor.getFinishTime()) {
-                eventMsg += `Process ${ processor.getRunningProcess()?.getName() } ended. `;
-                processor.setFree();
-            }
+        if (processor.isBusy() && now === processor.getFinishTime()) {
+            eventMsg += `Process ${ processor.getRunningProcess()?.getName() } ended. `;
+            processor.setFree();
         }
 
         handleArrivedProcess();
@@ -44,7 +40,6 @@ export function FCFS(...pcbs: Array<PCB>): void {
 
             processor.setRunningProcess(runningProcess);
             processor.setFinishTime(now + runningProcess?.getEstimatedRunTime());
-
             eventMsg += `Processor started running process ${ runningProcess?.getName() }. `;
         }
 
