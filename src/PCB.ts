@@ -24,10 +24,6 @@ export class PCB {
         return this.arrivedTime;
     }
 
-    public setNext(pcb: PCB | null): void {
-        this.next = pcb;
-    }
-
     public getNext(): PCB | null {
         return this.next ? this.next : null;
     }
@@ -38,5 +34,17 @@ export class PCB {
 
     public getPriorityNumber() {
         return this.priority;
+    }
+
+    public setNext(pcb: PCB | null): void {
+        this.next = pcb;
+    }
+
+    public setEstimatedRunTime(estimatedRunTime: number): void {
+        this.estimatedRunTime = estimatedRunTime;
+    }
+
+    public setPriorityNumber(priority: number): void {
+        this.priority = priority;
     }
 }

@@ -47,6 +47,7 @@ export function PSA(...pcbs: Array<PCB>): void {
             const runningProcess = readyQueue.dequeue();
 
             processor.setRunningProcess(runningProcess);
+            processor.setFinishTime(now + runningProcess?.getEstimatedRunTime());
             eventMsg += `Processor started running process ${ runningProcess.getName() }. `;
         }
 

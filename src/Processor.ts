@@ -12,10 +12,6 @@ export class Processor {
         this.finishTime = 0;
     }
 
-    public setFinishTime(time: number) {
-        this.finishTime = time;
-    }
-
     public getStatus(): EProcessorStatus {
         return this.runningProcess === null ? EProcessorStatus.FREE : EProcessorStatus.BUSY;
     }
@@ -37,15 +33,14 @@ export class Processor {
     }
 
     public setRunningProcess(process: PCB | null): void {
-        const { now } = store;
-
         this.runningProcess = process;
-        if (process !== null) {
-            this.setFinishTime(now + this.runningProcess.getEstimatedRunTime());
-        }
     }
 
     public setFree(): void {
         this.setRunningProcess(null);
+    }
+
+    public setFinishTime(time: number) {
+        this.finishTime = time;
     }
 }
