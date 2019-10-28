@@ -1,5 +1,5 @@
 import { PCB } from '../PCB';
-import { print, red, green } from '../utils';
+import { print, red, green, yellow } from '../utils';
 import { Processor } from '../Processor';
 import { Queue } from '../Queue';
 /**
@@ -24,17 +24,17 @@ export function PSA(...pcbs: Array<PCB>): void {
     // Scheduling
     window.addEventListener('tick', ({ detail: { now } }: CustomEvent) => {
         const formattedNow = now.toString().padEnd(3, ' ');
-        let eventMsg: string = '';
-        let processStatus: string = '[ ]';
+        let events: Array<string> = [];
+        let processStatus: string = '';
 
         if (processor.isBusy() && now === processor.getFinishTime()) {
-            eventMsg += `process ${ processor.getRunningProcess()?.getName() } ${ red('ended') }. `;
+            events.push(`process ${ yellow(processor.getRunningProcess()?.getName()) } ${ red('ended') }`);
             processor.setFree();
         }
 
         (function updateReadyQueue() {
             if (now === process?.getArrivedTime()) {
-                eventMsg += `Process ${ process.getName() } ${ green('arrived') }. `;
+                events.push(`Process ${ yellow(process.getName()) } ${ green('arrived') }`);
                 readyQueue.enqueue(process);
                 readyQueue.sort((a, b) => a.getPriorityNumber() > b.getPriorityNumber() ? 1 : -1);
                 process = process.getNext();
@@ -47,12 +47,14 @@ export function PSA(...pcbs: Array<PCB>): void {
 
             processor.setRunningProcess(runningProcess);
             processor.setFinishTime(now + runningProcess?.getEstimatedRunTime());
-            eventMsg += `Processor started running process ${ runningProcess.getName() }. `;
+            events.push(`Processor started running process ${ yellow(runningProcess.getName()) }`);
         }
 
-        processStatus = `[ ${ processor.getRunningProcess()?.getName() || '' } ]`;
-        if (eventMsg) {
-            print(`${ formattedNow } ${ eventMsg }`);
+        processStatus = `[ ${ processor.getRunningProcess()?.getName() || ''.padEnd(10,' ') } ]`;
+        if (events.length > 0) {
+            for (let eventMsg of events) {
+                print(`${ ''.padEnd(20, ' ') } ${ eventMsg }`);
+            }
         }
         print(`${ formattedNow } ${ processStatus }`);
     });
