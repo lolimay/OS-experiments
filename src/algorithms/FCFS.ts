@@ -33,7 +33,16 @@ export function FCFS(...pcbs: Array<PCB>): void {
             processor.setFree();
         }
 
-        updateReadyQueue();
+        (function updateReadyQueue() {
+            if (!process) return;
+
+            if (now === process.getArrivedTime()) {
+                eventMsg += `Process ${ process.getName() } arrived. `;
+                readyQueue.enqueue(process);
+                process = process.getNext();
+                updateReadyQueue();
+            }
+        })();
 
         if (processor.isFree() && !readyQueue.isEmpty()) {
             const runningProcess = readyQueue.dequeue();
@@ -47,17 +56,6 @@ export function FCFS(...pcbs: Array<PCB>): void {
             print(`${ formattedNow } ${ eventMsg }`);
         }
         print(`${ formattedNow } ${ processStatus }`);
-
-        function updateReadyQueue() {
-            if (!process) return;
-
-            if (now === process.getArrivedTime()) {
-                eventMsg += `Process ${ process.getName() } arrived. `;
-                readyQueue.enqueue(process);
-                process = process.getNext();
-                updateReadyQueue();
-            }
-        }
     });
 
     print(pcbs.map(pcb => ({...pcb, next: pcb.getNext()?.getName() })));
