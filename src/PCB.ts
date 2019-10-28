@@ -13,7 +13,7 @@ export class PCB {
         private estimatedRunTime: number = randomNonNegativeInt(100) + 1,
     ) {
         this.name = randomString(10);
-        this.priority = randomNonNegativeInt(5);
+        this.priority = randomNonNegativeInt(100);
     }
 
     public getName() {

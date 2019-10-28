@@ -13,7 +13,7 @@ export class Processor {
     }
 
     public getStatus(): EProcessorStatus {
-        return this.runningProcess === null ? EProcessorStatus.FREE : EProcessorStatus.BUSY;
+        return this.runningProcess ? EProcessorStatus.BUSY : EProcessorStatus.FREE;
     }
 
     public isBusy(): boolean {
