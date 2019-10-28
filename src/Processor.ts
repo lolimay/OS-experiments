@@ -1,5 +1,7 @@
 import { EProcessorStatus } from './definition';
 import { PCB } from './PCB';
+import { print } from './utils';
+import { store } from '.';
 
 export class Processor {
     private runningProcess: PCB | null;
@@ -8,6 +10,10 @@ export class Processor {
     constructor() {
         this.runningProcess = null;
         this.finishTime = 0;
+    }
+
+    public setFinishTime(time: number) {
+        this.finishTime = time;
     }
 
     public getStatus(): EProcessorStatus {
@@ -31,11 +37,10 @@ export class Processor {
     }
 
     public setRunningProcess(process: PCB | null): void {
-        this.runningProcess = process;
-    }
+        const { now } = store;
 
-    public setFinishTime(time: number) {
-        this.finishTime = time;
+        this.runningProcess = process;
+        this.setFinishTime(now + this.runningProcess.getEstimatedRunTime());
     }
 
     public setFree(): void {

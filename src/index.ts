@@ -4,7 +4,7 @@ import { PCB } from './PCB';
 import './index.css';
 import 'xterm/css/xterm.css';
 
-var store = {
+export var store = {
     now: 0,
     clockSpeed: 1,
     fcfsControls: {
