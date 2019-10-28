@@ -23,7 +23,7 @@ export function FCFS(...pcbs: Array<PCB>): void {
     }
 
     // Scheduling
-    window.addEventListener('tick', ({ detail: { currentTime: now } }: CustomEvent) => {
+    window.addEventListener('tick', ({ detail: { now } }: CustomEvent) => {
         const formattedNow = now.toString().padEnd(3, ' ');
         let eventMsg: string = '';
         let processStatus: string = '[ ]';
@@ -33,7 +33,7 @@ export function FCFS(...pcbs: Array<PCB>): void {
             processor.setFree();
         }
 
-        handleArrivedProcess();
+        updateReadyQueue();
 
         if (processor.isFree() && !readyQueue.isEmpty()) {
             const runningProcess = readyQueue.dequeue();
@@ -49,14 +49,14 @@ export function FCFS(...pcbs: Array<PCB>): void {
         }
         print(`${ formattedNow } ${ processStatus }`);
 
-        function handleArrivedProcess() {
+        function updateReadyQueue() {
             if (!process) return;
 
             if (now === process.getArrivedTime()) {
                 eventMsg += `Process ${ process.getName() } arrived. `;
                 readyQueue.enqueue(process);
                 process = process.getNext();
-                handleArrivedProcess();
+                updateReadyQueue();
             }
         }
     });
