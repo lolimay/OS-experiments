@@ -29,12 +29,12 @@ setTimeout(function timer() {
 
 const pcbs: Array<PCB> = [];
 
-for (let i=0; i<10; i++) {
+for (let i=0; i<5; i++) {
     pcbs.push(new PCB());
 }
 
 // FCFS Algorithm
-// FCFS(...pcbs);
+FCFS(...pcbs);
 
 // PSA Algorithm
-PSA(...pcbs);
+// PSA(...pcbs);

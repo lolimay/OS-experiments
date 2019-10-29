@@ -1,5 +1,5 @@
 import { PCB } from '../PCB';
-import { print } from '../utils';
+import { print, red, green, yellow } from '../utils';
 import { Processor } from '../Processor';
 import { Queue } from '../Queue';
 
@@ -8,7 +8,7 @@ import { Queue } from '../Queue';
  */
 export function FCFS(...pcbs: Array<PCB>): void {
     // Initialize
-    pcbs.sort((a, b) => a.getArrivedTime() > b.getArrivedTime() ? 1 : -1);
+    pcbs = pcbs.sort((a, b) => a.getArrivedTime() > b.getArrivedTime() ? 1 : -1);
     const processor: Processor = new Processor();
     const readyQueue: Queue<PCB> = new Queue();
     const head: PCB | null = pcbs[0];
@@ -25,17 +25,17 @@ export function FCFS(...pcbs: Array<PCB>): void {
     // Scheduling
     window.addEventListener('tick', ({ detail: { now } }: CustomEvent) => {
         const formattedNow = now.toString().padEnd(3, ' ');
-        let eventMsg: string = '';
-        let processStatus: string = '[ ]';
+        let events: Array<string> = [];
+        let processStatus: string = '';
 
         if (processor.isBusy() && now === processor.getFinishTime()) {
-            eventMsg += `Process ${ processor.getRunningProcess()?.getName() } ended. `;
+            events.push(`process ${ yellow(processor.getRunningProcess()?.getName()) } ${ red('ended') }`);
             processor.setFree();
         }
 
         (function updateReadyQueue() {
             if (now === process?.getArrivedTime()) {
-                eventMsg += `Process ${ process.getName() } arrived. `;
+                events.push(`Process ${ yellow(process.getName()) } ${ green('arrived') }`);
                 readyQueue.enqueue(process);
                 process = process.getNext();
                 updateReadyQueue();
@@ -47,12 +47,14 @@ export function FCFS(...pcbs: Array<PCB>): void {
 
             processor.setRunningProcess(runningProcess);
             processor.setFinishTime(now + runningProcess?.getEstimatedRunTime());
-            eventMsg += `Processor started running process ${ runningProcess.getName() }. `;
+            events.push(`Processor started running process ${ yellow(runningProcess.getName()) }`);
         }
 
-        processStatus = `[ ${ processor.getRunningProcess()?.getName() || '' } ]`;
-        if (eventMsg) {
-            print(`${ formattedNow } ${ eventMsg }`);
+        processStatus = `[ ${ processor.getRunningProcess()?.getName() || ''.padEnd(10,' ') } ]`;
+        if (events.length > 0) {
+            for (let eventMsg of events) {
+                print(`${ formattedNow.padEnd(20, ' ') } ${ eventMsg }`);
+            }
         }
         print(`${ formattedNow } ${ processStatus }`);
     });
