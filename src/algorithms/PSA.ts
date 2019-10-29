@@ -36,10 +36,10 @@ export function PSA(...pcbs: Array<PCB>): void {
             if (now === process?.getArrivedTime()) {
                 events.push(`Process ${ yellow(process.getName()) } ${ green('arrived') }`);
                 readyQueue.enqueue(process);
-                readyQueue.sort((a, b) => a.getPriorityNumber() > b.getPriorityNumber() ? 1 : -1);
                 process = process.getNext();
                 updateReadyQueue();
             }
+            readyQueue.sort((a, b) => a.getPriorityNumber() > b.getPriorityNumber() ? 1 : -1);
         })();
 
         if (processor.isFree() && !readyQueue.isEmpty()) {
