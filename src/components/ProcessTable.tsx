@@ -3,10 +3,6 @@ import styled from 'styled-components';
 import { store } from '../';
 
 export default class ProcessTable extends React.Component<{}, any> {
-    componentDidMount() {
-        console.log(store);
-    }
-
     render() {
         return (
             <StyledTable id='process-table'>
