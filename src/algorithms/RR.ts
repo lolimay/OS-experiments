@@ -1,3 +1,5 @@
+import { store } from '../';
+import { IProcess } from '../definition';
 import { PCB } from '../PCB';
 import { Processor } from '../Processor';
 import { Queue } from '../Queue';
@@ -9,6 +11,15 @@ import { green, print, red, yellow } from '../utils';
 export function RR(...pcbs: Array<PCB>): void {
     // Initialize
     pcbs = pcbs.sort((a, b) => a.getArrivedTime() > b.getArrivedTime() ? 1 : -1);
+    pcbs.forEach(process => store.processes.set(process.getName(), {
+        name: process.getName(),
+        priorityNumber: process.getPriorityNumber(),
+        arrivedTime: process.getArrivedTime(),
+        servedTime: -1,
+        startTime: -1,
+        finishTime: -1,
+        turnAroundTime: -1
+    } as IProcess));
     const TIME_SLICE = 3;
     const processor: Processor = new Processor();
     const readyQueue: Queue<PCB> = new Queue();

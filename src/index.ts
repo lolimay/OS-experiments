@@ -1,8 +1,10 @@
 import  * as dat from 'dat.gui';
 import { DynamicPSA, FCFS, PSA, RR } from './algorithms';
+import { IProcess } from './definition';
 import { PCB } from './PCB';
 
 import 'xterm/css/xterm.css';
+import './App';
 import './index.css';
 
 export var store = {
@@ -10,6 +12,7 @@ export var store = {
     clockSpeed: 1,
     fcfsControls: {
     },
+    processes: new Map() as Map<string, IProcess>
 };
 
 const gui = new dat.GUI();

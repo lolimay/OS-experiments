@@ -28,6 +28,15 @@ body {
     right: 40.5%;
 }
 
+#app {
+    right: 200px;
+    bottom: 0;
+    top: 200px;
+    position: absolute;
+    height: 100vh;
+    width: 50vw;
+}
+
 ::-webkit-scrollbar { width: 8px; height: 3px;}
 ::-webkit-scrollbar-button {  background-color: #666; }
 ::-webkit-scrollbar-track {  background-color: #646464;}
