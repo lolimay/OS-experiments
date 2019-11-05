@@ -1,5 +1,5 @@
 import  * as dat from 'dat.gui';
-import { FCFS, PSA } from './algorithms';
+import { FCFS, PSA, DynamicPSA } from './algorithms';
 import { PCB } from './PCB';
 import './index.css';
 import 'xterm/css/xterm.css';
@@ -30,11 +30,13 @@ setTimeout(function timer() {
 const pcbs: Array<PCB> = [];
 
 for (let i=0; i<5; i++) {
-    pcbs.push(new PCB());
+    pcbs.push(new PCB(0, 5));
 }
 
 // FCFS Algorithm
-FCFS(...pcbs);
+// FCFS(...pcbs);
 
 // PSA Algorithm
 // PSA(...pcbs);
+
+DynamicPSA(...pcbs);
