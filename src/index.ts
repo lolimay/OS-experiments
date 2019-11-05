@@ -1,5 +1,5 @@
 import  * as dat from 'dat.gui';
-import { FCFS, PSA, DynamicPSA } from './algorithms';
+import { FCFS, PSA, DynamicPSA, RR } from './algorithms';
 import { PCB } from './PCB';
 import './index.css';
 import 'xterm/css/xterm.css';
@@ -39,4 +39,6 @@ for (let i=0; i<5; i++) {
 // PSA Algorithm
 // PSA(...pcbs);
 
-DynamicPSA(...pcbs);
+// DynamicPSA(...pcbs);
+
+RR(...pcbs);
