@@ -1,4 +1,4 @@
-import { randomString, getColorFromName } from '../src/utils';
+import { getColorFromName, randomString } from '../src/utils';
 
 test('main', () => {
     for (let i=0; i<10; i++) {

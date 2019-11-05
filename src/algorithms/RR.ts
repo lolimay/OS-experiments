@@ -1,7 +1,7 @@
 import { PCB } from '../PCB';
-import { print, red, green, yellow } from '../utils';
 import { Processor } from '../Processor';
 import { Queue } from '../Queue';
+import { green, print, red, yellow } from '../utils';
 
 /**
  * Round Robin Algorithm (RR)

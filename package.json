@@ -3,16 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "24.0.19",
-    "@types/node": "12.11.2",
     "dat.gui": "^0.7.6",
-    "typescript": "next",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
     "xterm": "^4.1.0",
     "xterm-addon-fit": "^0.3.0"
   },
   "scripts": {
     "start": "parcel --host 0.0.0.0 -p 1234 watch index.html",
     "build": "NODE_ENV=production parcel build index.html --no-source-maps",
+    "lint": "npx tslint --project tslint.json",
     "test": "jest"
   },
   "eslintConfig": {
@@ -31,11 +31,15 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "12.11.2",
     "@babel/preset-env": "^7.6.3",
     "@types/dat.gui": "^0.7.5",
     "@types/jest": "^24.0.19",
     "jest": "^24.9.0",
     "parcel": "^1.12.4",
-    "ts-jest": "^24.1.0"
+    "ts-jest": "^24.1.0",
+    "tslint": "^6.0.0-beta0",
+    "tslint-react": "^4.1.0",
+    "typescript": "^3.8.0-dev.20191105"
   }
 }

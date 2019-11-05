@@ -1,8 +1,9 @@
 import  * as dat from 'dat.gui';
-import { FCFS, PSA, DynamicPSA, RR } from './algorithms';
+import { DynamicPSA, FCFS, PSA, RR } from './algorithms';
 import { PCB } from './PCB';
-import './index.css';
+
 import 'xterm/css/xterm.css';
+import './index.css';
 
 export var store = {
     now: 0,
@@ -25,7 +26,7 @@ setTimeout(function timer() {
     }
     setTimeout(timer, 1/store.clockSpeed * 1000);
     store.now++;
-}, 1/store.clockSpeed * 1000)
+}, 1/store.clockSpeed * 1000);
 
 const pcbs: Array<PCB> = [];
 

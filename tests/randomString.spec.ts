@@ -21,6 +21,6 @@ test('Only letters and numbers should appear', () => {
     for (let i=0; i<REPEAT_TIMES; i++) {
         randomString(EXPECTED_LENGTH).split('').forEach(char => {
             expect(validChars.includes(char));
-        })
+        });
     }
 });

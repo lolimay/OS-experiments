@@ -1,8 +1,8 @@
-import { randomString } from './randomString';
-import { randomNonNegativeInt } from './randomNonNegativeInt';
-import { print } from './log';
+import { green, red, yellow } from './colors';
 import { getColorFromName } from './getColorFromName';
-import { red, green, yellow } from './colors';
+import { print } from './log';
+import { randomNonNegativeInt } from './randomNonNegativeInt';
+import { randomString } from './randomString';
 
 export {
     randomString,

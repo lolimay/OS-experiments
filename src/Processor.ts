@@ -1,7 +1,5 @@
 import { EProcessorStatus } from './definition';
 import { PCB } from './PCB';
-import { print } from './utils';
-import { store } from '.';
 
 export class Processor {
     private runningProcess: PCB | null;

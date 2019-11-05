@@ -1,4 +1,4 @@
-import { randomString, randomNonNegativeInt } from './utils';
+import { randomNonNegativeInt, randomString } from './utils';
 
 export class PCB {
     private name: string;
