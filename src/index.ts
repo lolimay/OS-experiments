@@ -30,7 +30,7 @@ setTimeout(function timer() {
 const pcbs: Array<PCB> = [];
 
 for (let i=0; i<5; i++) {
-    pcbs.push(new PCB(0, 5));
+    pcbs.push(new PCB(0, 3));
 }
 
 // FCFS Algorithm

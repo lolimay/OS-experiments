@@ -58,10 +58,15 @@ export function RR(...pcbs: Array<PCB>): void {
 
             processor.setRunningProcess(runningProcess);
             processor.setFinishTime(now + runTime);
-            runningProcess.setEstimatedRunTime(runningProcess.getEstimatedRunTime() - runTime);
             if (runningProcess !== lastProcess) {
                 events.push(`Processor started running process ${ yellow(runningProcess.getName()) }`);
             }
+        }
+
+        if (processor.isBusy()) {
+            const runningProcess = processor.getRunningProcess();
+
+            runningProcess.setEstimatedRunTime(runningProcess.getEstimatedRunTime() - 1);
         }
 
         const overview = pcbs.map(
