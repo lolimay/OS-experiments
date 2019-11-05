@@ -1,22 +1,18 @@
 body {
     margin: 0;
-    background: black;
     overflow-y: hidden;
+    background: #000;
 }
 
 #terminal {
-    right: 0;
+    left: 20px;
     bottom: 0;
     top: 0;
     position: absolute;
-    height: calc(100vh - 20px);
-    width: 100vw;
+    height: 100vh;
+    width: 40vw;
     z-index: -1;
     overflow-x: hidden;
-}
-
-.xterm-screen {
-    height: 100vh!important;
 }
 
 .xterm-text-layer {

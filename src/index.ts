@@ -11,7 +11,7 @@ export var store = {
     },
 };
 
-const gui = new dat.GUI({ closed: true });
+const gui = new dat.GUI();
 gui.add(store, 'clockSpeed', 0.5, 300);
 
 // Global Clock
