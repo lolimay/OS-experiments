@@ -13,7 +13,7 @@ export var store = {
     fcfsControls: {
     },
     processes: [] as Array<IProcess>,
-    algorithm: AlgorithmType.PSA 
+    algorithm: AlgorithmType.FCFS
 };
 
 declare global {
@@ -40,7 +40,7 @@ setTimeout(function timer() {
 const pcbs: Array<PCB> = [];
 
 for (let i=0; i<5; i++) {
-    const process = new PCB(0, 3);
+    const process = new PCB(0, 5);
 
     store.processes.push({
         name: process.getName(),

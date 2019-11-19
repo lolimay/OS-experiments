@@ -105,6 +105,4 @@ export function PSA(...pcbs: Array<PCB>): void {
         }
         print(`${formattedNow} ${processStatus}`);
     });
-
-    print(pcbs.map(pcb => ({ ...pcb, next: pcb.getNext()?.getName() })));
 }
