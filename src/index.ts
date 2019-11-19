@@ -40,9 +40,9 @@ for (let i=0; i<5; i++) {
 // FCFS Algorithm
 // FCFS(...pcbs);
 
-// PSA Algorithm
-// PSA(...pcbs);
+// PSA Algorithms
+PSA(...pcbs);
 
 // DynamicPSA(...pcbs);
 
-RR(...pcbs);
+// RR(...pcbs);

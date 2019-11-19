@@ -17,6 +17,7 @@
     "noEmit": true,
     "jsx": "react",
     "noUnusedLocals": true,
+    "allowUnusedLabels": true,
     "types": ["node", "react"]
   },
   "include": [

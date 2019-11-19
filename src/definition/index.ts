@@ -1,7 +1,11 @@
 import { EProcessorStatus } from './EProcessorStatus';
+import { EventType } from './EventType';
+import { IEvent } from './IEvent';
 import { IProcess } from './IProcess';
 
 export {
     EProcessorStatus,
-    IProcess
+    EventType,
+    IProcess,
+    IEvent
 };
