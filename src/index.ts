@@ -13,7 +13,7 @@ export var store = {
     fcfsControls: {
     },
     processes: [] as Array<IProcess>,
-    algorithm: AlgorithmType.FCFS
+    algorithm: AlgorithmType.DynamicPSA
 };
 
 declare global {

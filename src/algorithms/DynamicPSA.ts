@@ -1,3 +1,5 @@
+import { EventType, IEvent } from '../definition';
+import { store } from '../index';
 import { PCB } from '../PCB';
 import { Processor } from '../Processor';
 import { Queue } from '../Queue';
@@ -34,7 +36,7 @@ export function DynamicPSA(...pcbs: Array<PCB>): void {
     // Scheduling
     window.addEventListener('tick', ({ detail: { now } }: CustomEvent) => {
         const formattedNow = now.toString().padEnd(3, ' ');
-        let events: Array<string> = [];
+        let events: Array<IEvent> = [];
         let processStatus: string = '';
 
         if (processor.isBusy() && now === processor.getFinishTime()) {
@@ -43,7 +45,13 @@ export function DynamicPSA(...pcbs: Array<PCB>): void {
             if (process.getEstimatedRunTime() > 0) {
                 readyQueue.enqueue(processor.getRunningProcess());
             } else {
-                events.push(`process ${ yellow(process.getName()) } ${ red('ended') }`);
+                const currentProcess = process.getName();
+                events.push({
+                    type: EventType.ProcessEnded,
+                    msg: `process ${ yellow(currentProcess) } ${ red('ended') }`,
+                    processName: currentProcess,
+                    time: now
+                });
             }
             lastProcess = process;
             processor.setFree();
@@ -51,7 +59,12 @@ export function DynamicPSA(...pcbs: Array<PCB>): void {
 
         (function updateReadyQueue() {
             if (now === process?.getArrivedTime()) {
-                events.push(`Process ${ yellow(process.getName()) } ${ green('arrived') }`);
+                events.push({
+                    msg: `Process ${yellow(process.getName())} ${green('arrived')}`,
+                    type: EventType.ProcessArrived,
+                    time: now,
+                    processName: process.getName(),
+                });
                 readyQueue.enqueue(process);
                 process = process.getNext();
                 updateReadyQueue();
@@ -67,21 +80,48 @@ export function DynamicPSA(...pcbs: Array<PCB>): void {
             runningProcess.setEstimatedRunTime(runningProcess.getEstimatedRunTime() -1);
             runningProcess.setPriorityNumber(runningProcess.getPriorityNumber() + 1);
             if (runningProcess !== lastProcess) {
-                events.push(`Processor started running process ${ yellow(runningProcess.getName()) }`);
+                events.push({
+                    msg: `Processor started running process ${yellow(runningProcess.getName())}`,
+                    type: EventType.ProcessStarted,
+                    time: now,
+                    processName: runningProcess.getName()
+                });
             }
         }
 
-        const overview = pcbs.map(
-            process => `${ process.getName() }/${ process.getEstimatedRunTime() }/${ process.getPriorityNumber() }`
-        ).join(' ');
-        processStatus = `[ ${ processor.getRunningProcess()?.getName() || ''.padEnd(10,' ') } ]`;
+        processStatus = `[ ${processor.getRunningProcess()?.getName() || ''.padEnd(10, ' ')} ]`;
         if (events.length > 0) {
-            for (let eventMsg of events) {
-                print(`${ formattedNow.padEnd(20, ' ') } ${ eventMsg }`);
+            for (let { msg } of events) {
+                print(`${formattedNow.padEnd(20, ' ')} ${msg}`);
+
+                events.forEach(({ type, time, processName }) => {
+                    store.processes.forEach(process => {
+                        const { name, arrivedTime = undefined, startTime = undefined } = process;
+
+                        if (name === processName) {
+                            switch (type) {
+                                case EventType.ProcessArrived:
+                                    process.arrivedTime = time.toString();
+                                    break;
+                                case EventType.ProcessStarted:
+                                    process.startTime = time.toString();
+                                    break;
+                                case EventType.ProcessEnded:
+                                    process.finishTime = time.toString();
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                        }
+                        if (process.finishTime) {
+                            process.servedTime = (parseInt(process.finishTime) - parseInt(startTime)).toString();
+                            process.turnAroundTime = (parseInt(process.finishTime) - parseInt(arrivedTime)).toString();
+                        }
+                    });
+                });
             }
         }
-        print(`${ formattedNow } ${ processStatus } ${ overview }`);
+        print(`${formattedNow} ${processStatus}`);
     });
-
-    print(pcbs.map(pcb => ({...pcb, next: pcb.getNext()?.getName() })));
 }

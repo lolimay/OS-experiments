@@ -20,14 +20,14 @@ export default class ProcessTable extends React.Component<{}, any> {
         }), 100);
     }
 
-    isShowPriority() {
+    isDynamicPSA() {
         return window.store?.algorithm === AlgorithmType.DynamicPSA;
     }
 
     renderProcesses() {
         return Array.from(this.state.processes.values()).map(({
             name = '',
-            priorityNumber = '',
+            priority = '',
             arrivedTime = '',
             servedTime = '',
             startTime = '',
@@ -36,9 +36,9 @@ export default class ProcessTable extends React.Component<{}, any> {
         }) => (
             <tr>
                 <th>{ name  }</th>
-                { this.isShowPriority() ? <th>{ priorityNumber }</th> : null }
+                { this.isDynamicPSA() ? <th>{ priority }</th> : null }
                 <th>{ arrivedTime }</th>
-                <th>{ servedTime }</th>
+                { !this.isDynamicPSA() ? <th>{ servedTime }</th> : null }
                 <th>{ startTime }</th>
                 <th>{ finishTime }</th>
                 <th>{ turnAroundTime }</th>
@@ -52,9 +52,9 @@ export default class ProcessTable extends React.Component<{}, any> {
                 <thead>
                     <tr>
                         <th>Process Name</th>
-                        { this.isShowPriority() ? <th>Priority Number<sup>*</sup></th> : null }
+                        { this.isDynamicPSA() ? <th>Priority Number<sup>*</sup></th> : null }
                         <th>Arrived Time</th>
-                        <th>Served Time</th>
+                        { !this.isDynamicPSA() ? <th>Served Time</th> : null }
                         <th>Start Time</th>
                         <th>Finish Time</th>
                         <th>Turnaround Time</th>
@@ -64,7 +64,7 @@ export default class ProcessTable extends React.Component<{}, any> {
                     { this.renderProcesses() }
                     <tr>
                         <th>Average Turnaround Time</th>
-                        <th colSpan={ this.isShowPriority() ? 6 : 5 }>{ this.state.averageTurnAroundTime }</th>
+                        <th colSpan={ 5 }>{ this.state.averageTurnAroundTime }</th>
                     </tr>
                 </tbody>
             </StyledTable>
