@@ -24,6 +24,12 @@ export function DynamicPSA(...pcbs: Array<PCB>): void {
     const head: PCB = pcbs[0];
     let process: PCB = head;
     let lastProcess: PCB = null;
+    let firstStartTimes: Map<string, number> = new Map();
+    let estimatedRunTimes: Map<string, number> = new Map();
+
+    pcbs.forEach(process => {
+        estimatedRunTimes.set(process.getName(), process.getEstimatedRunTime());
+    });
 
     for (let i=0; i<pcbs.length; i++) {
         if (i === pcbs.length-1) {
@@ -44,6 +50,12 @@ export function DynamicPSA(...pcbs: Array<PCB>): void {
 
             if (process.getEstimatedRunTime() > 0) {
                 readyQueue.enqueue(processor.getRunningProcess());
+
+                store.processes.forEach(process => {
+                    if (process.name === processor.getRunningProcess()?.getName()) {
+                        process.servedTime = String(estimatedRunTimes.get(process.name) - processor.getRunningProcess().getEstimatedRunTime());
+                    }
+                });
             } else {
                 const currentProcess = process.getName();
                 events.push({
@@ -80,6 +92,9 @@ export function DynamicPSA(...pcbs: Array<PCB>): void {
             runningProcess.setEstimatedRunTime(runningProcess.getEstimatedRunTime() -1);
             runningProcess.setPriorityNumber(runningProcess.getPriorityNumber() + 1);
             if (runningProcess !== lastProcess) {
+                if (!firstStartTimes.has(runningProcess.getName())) {
+                    firstStartTimes.set(runningProcess.getName(), now);
+                }
                 events.push({
                     msg: `Processor started running process ${yellow(runningProcess.getName())}`,
                     type: EventType.ProcessStarted,
@@ -104,7 +119,10 @@ export function DynamicPSA(...pcbs: Array<PCB>): void {
                                     process.arrivedTime = time.toString();
                                     break;
                                 case EventType.ProcessStarted:
-                                    process.startTime = time.toString();
+                                    if (!firstStartTimes.has(name)) {
+                                        return;
+                                    }
+                                    process.startTime = firstStartTimes.get(name).toString();
                                     break;
                                 case EventType.ProcessEnded:
                                     process.finishTime = time.toString();
