@@ -5,11 +5,18 @@ import { AlgorithmType } from '../definition';
 export default class ProcessTable extends React.Component<{}, any> {
     state = {
         processes: new Map(),
+        averageTurnAroundTime: ''
     };
 
     componentDidMount() {
         setInterval(() => this.setState({
             processes: window.store.processes,
+            averageTurnAroundTime: (() => {
+                const processes = Array.from(window.store.processes).map(({ turnAroundTime }) => parseInt(turnAroundTime));
+                const averageTurnAroundTime = processes.reduce((sum, value) => sum + value) / processes.length;
+
+                return averageTurnAroundTime !== NaN ? averageTurnAroundTime : '';
+            })(),
         }), 100);
     }
 
@@ -28,7 +35,7 @@ export default class ProcessTable extends React.Component<{}, any> {
             turnAroundTime = '',
         }) => (
             <tr>
-                <th>{ name }</th>
+                <th>{ name  }</th>
                 { this.isShowPriority() ? <th>{ priorityNumber }</th> : null }
                 <th>{ arrivedTime }</th>
                 <th>{ servedTime }</th>
@@ -55,6 +62,10 @@ export default class ProcessTable extends React.Component<{}, any> {
                 </thead>
                 <tbody>
                     { this.renderProcesses() }
+                    <tr>
+                        <th>Average Turnaround Time</th>
+                        <th colSpan={ this.isShowPriority() ? 6 : 5 }>{ this.state.averageTurnAroundTime }</th>
+                    </tr>
                 </tbody>
             </StyledTable>
         );
