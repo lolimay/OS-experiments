@@ -1,9 +1,9 @@
 export interface IProcess {
     name: string;
-    priorityNumber: number;
-    arrivedTime: number;
-    servedTime: number;
-    startTime: number;
-    finishTime: number;
-    turnAroundTime: number;
+    priority: string;
+    arrivedTime: string;
+    servedTime: string;
+    startTime: string;
+    finishTime: string;
+    turnAroundTime: string;
 }

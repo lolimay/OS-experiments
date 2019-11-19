@@ -1,4 +1,5 @@
 import { EventType, IEvent } from '../definition';
+import { store } from '../index';
 import { PCB } from '../PCB';
 import { Processor } from '../Processor';
 import { Queue } from '../Queue';
@@ -14,14 +15,13 @@ export function PSA(...pcbs: Array<PCB>): void {
     const readyQueue: Queue<PCB> = new Queue();
     const head: PCB | null = pcbs[0];
     let process: PCB | null = head;
-    let allEvents: Array<IEvent> = [];
 
-    for (let i=0; i<pcbs.length; i++) {
-        if (i === pcbs.length-1) {
+    for (let i = 0; i < pcbs.length; i++) {
+        if (i === pcbs.length - 1) {
             pcbs[i].setNext(null);
             break;
         }
-        pcbs[i].setNext(pcbs[i+1]);
+        pcbs[i].setNext(pcbs[i + 1]);
     }
 
     // Scheduling
@@ -35,7 +35,7 @@ export function PSA(...pcbs: Array<PCB>): void {
 
             events.push({
                 type: EventType.ProcessEnded,
-                msg: `process ${ yellow(currentProcess) } ${ red('ended') }`,
+                msg: `process ${yellow(currentProcess)} ${red('ended')}`,
                 processName: currentProcess,
                 time: now
             });
@@ -45,7 +45,7 @@ export function PSA(...pcbs: Array<PCB>): void {
         (function updateReadyQueue() {
             if (now === process?.getArrivedTime()) {
                 events.push({
-                    msg: `Process ${ yellow(process.getName()) } ${ green('arrived') }`,
+                    msg: `Process ${yellow(process.getName())} ${green('arrived')}`,
                     type: EventType.ProcessArrived,
                     time: now,
                     processName: process.getName(),
@@ -63,23 +63,48 @@ export function PSA(...pcbs: Array<PCB>): void {
             processor.setRunningProcess(runningProcess);
             processor.setFinishTime(now + runningProcess?.getEstimatedRunTime());
             events.push({
-                msg: `Processor started running process ${ yellow(runningProcess.getName()) }`,
+                msg: `Processor started running process ${yellow(runningProcess.getName())}`,
                 type: EventType.ProcessStarted,
                 time: now,
                 processName: runningProcess.getName()
             });
         }
 
-        processStatus = `[ ${ processor.getRunningProcess()?.getName() || ''.padEnd(10,' ') } ]`;
+        processStatus = `[ ${processor.getRunningProcess()?.getName() || ''.padEnd(10, ' ')} ]`;
         if (events.length > 0) {
             for (let { msg } of events) {
-                print(`${ formattedNow.padEnd(20, ' ') } ${ msg }`);
+                print(`${formattedNow.padEnd(20, ' ')} ${msg}`);
+
+                events.forEach(({ type, time, processName }) => {
+                    store.processes.forEach(process => {
+                        const { name, arrivedTime = undefined, startTime = undefined } = process;
+
+                        if (name === processName) {
+                            switch (type) {
+                                case EventType.ProcessArrived:
+                                    process.arrivedTime = time.toString();
+                                    break;
+                                case EventType.ProcessStarted:
+                                    process.startTime = time.toString();
+                                    break;
+                                case EventType.ProcessEnded:
+                                    process.finishTime = time.toString();
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                        }
+                        if (process.finishTime) {
+                            process.servedTime = (parseInt(process.finishTime) - parseInt(startTime)).toString();
+                            process.turnAroundTime = (parseInt(process.finishTime) - parseInt(arrivedTime)).toString();
+                        }
+                    });
+                });
             }
-            allEvents = allEvents.concat(events);
         }
-        console.log(allEvents);
-        print(`${ formattedNow } ${ processStatus }`);
+        print(`${formattedNow} ${processStatus}`);
     });
 
-    print(pcbs.map(pcb => ({...pcb, next: pcb.getNext()?.getName() })));
+    print(pcbs.map(pcb => ({ ...pcb, next: pcb.getNext()?.getName() })));
 }

@@ -1,8 +1,39 @@
 import React from 'react';
 import styled from 'styled-components';
-import { store } from '../';
 
 export default class ProcessTable extends React.Component<{}, any> {
+    state = {
+        processes: new Map(),
+    };
+
+    componentDidMount() {
+        setInterval(() => this.setState({
+            processes: window.store.processes,
+        }), 100);
+    }
+
+    renderProcesses() {
+        return Array.from(this.state.processes.values()).map(({
+            name = '',
+            priorityNumber = '',
+            arrivedTime = '',
+            servedTime = '',
+            startTime = '',
+            finishTime = '',
+            turnAroundTime = '',
+        }) => (
+            <tr>
+                <th>{ name }</th>
+                <th>{ priorityNumber }</th>
+                <th>{ arrivedTime }</th>
+                <th>{ servedTime }</th>
+                <th>{ startTime }</th>
+                <th>{ finishTime }</th>
+                <th>{ turnAroundTime }</th>
+            </tr>
+        ));
+    }
+
     render() {
         return (
             <StyledTable id='process-table'>
@@ -18,15 +49,7 @@ export default class ProcessTable extends React.Component<{}, any> {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Process Name</td>
-                        <td>Priority Number<sup>*</sup></td>
-                        <td>Arrived Time</td>
-                        <td>Served Time</td>
-                        <td>Start Time</td>
-                        <td>Finish Time</td>
-                        <td>Turnaround Time</td>
-                    </tr>
+                    { this.renderProcesses() }
                 </tbody>
             </StyledTable>
         );

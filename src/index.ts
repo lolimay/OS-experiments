@@ -1,6 +1,6 @@
 import  * as dat from 'dat.gui';
 import { DynamicPSA, FCFS, PSA, RR } from './algorithms';
-import { IProcess } from './definition';
+import { AlgorithmType, IProcess } from './definition';
 import { PCB } from './PCB';
 
 import 'xterm/css/xterm.css';
@@ -12,8 +12,14 @@ export var store = {
     clockSpeed: 1,
     fcfsControls: {
     },
-    processes: new Map() as Map<string, IProcess>
+    processes: [] as Array<IProcess>,
+    algorithm: AlgorithmType.PSA 
 };
+
+declare global {
+    interface Window { store: any; }
+}
+window.store = store;
 
 const gui = new dat.GUI();
 gui.add(store, 'clockSpeed', 0.5, 300);
@@ -34,15 +40,27 @@ setTimeout(function timer() {
 const pcbs: Array<PCB> = [];
 
 for (let i=0; i<5; i++) {
-    pcbs.push(new PCB(0, 3));
+    const process = new PCB(0, 3);
+
+    store.processes.push({
+        name: process.getName(),
+        priority: process.getPriorityNumber().toString(),
+    } as IProcess);
+    pcbs.push(process);
 }
 
-// FCFS Algorithm
-// FCFS(...pcbs);
-
-// PSA Algorithms
-PSA(...pcbs);
-
-// DynamicPSA(...pcbs);
-
-// RR(...pcbs);
+switch (store.algorithm) {
+    case AlgorithmType.FCFS:
+        FCFS(...pcbs);
+        break;
+    case AlgorithmType.DynamicPSA:
+        DynamicPSA(...pcbs);
+        break;
+    case AlgorithmType.RR:
+        RR(...pcbs);
+        break;
+    case AlgorithmType.PSA:
+        PSA(...pcbs);
+    default:
+        break;
+}
