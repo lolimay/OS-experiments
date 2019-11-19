@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { AlgorithmType } from '../definition';
 
 export default class ProcessTable extends React.Component<{}, any> {
     state = {
@@ -10,6 +11,10 @@ export default class ProcessTable extends React.Component<{}, any> {
         setInterval(() => this.setState({
             processes: window.store.processes,
         }), 100);
+    }
+
+    isShowPriority() {
+        return window.store?.algorithm === AlgorithmType.DynamicPSA;
     }
 
     renderProcesses() {
@@ -24,7 +29,7 @@ export default class ProcessTable extends React.Component<{}, any> {
         }) => (
             <tr>
                 <th>{ name }</th>
-                <th>{ priorityNumber }</th>
+                { this.isShowPriority() ? <th>{ priorityNumber }</th> : null }
                 <th>{ arrivedTime }</th>
                 <th>{ servedTime }</th>
                 <th>{ startTime }</th>
@@ -40,7 +45,7 @@ export default class ProcessTable extends React.Component<{}, any> {
                 <thead>
                     <tr>
                         <th>Process Name</th>
-                        <th>Priority Number<sup>*</sup></th>
+                        { this.isShowPriority() ? <th>Priority Number<sup>*</sup></th> : null }
                         <th>Arrived Time</th>
                         <th>Served Time</th>
                         <th>Start Time</th>
